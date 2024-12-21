@@ -1,0 +1,13 @@
+ # dependencies
+ node_modules/
+
+ # environment variables
+ .env
+
+ #Logs
+ logs
+ *.log
+ npm-debug.log*
+
+ #vs code specific
+ .vscode/
