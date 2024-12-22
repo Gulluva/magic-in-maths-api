@@ -1,64 +1,65 @@
-// models/spell.js
-'use strict';
-const { Model } = require('sequelize');
+//  models/spell.js
+const { DataTypes } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  class Spell extends Model {
-    static associate(models) {
-      // Existing associations
-      Spell.belongsTo(models.SpellCategory, {
-        foreignKey: 'spellCategoryId',
-        as: 'SpellCategory'
-      });
-      Spell.belongsToMany(models.User, { 
-        through: 'UserSpells',
-        as: 'practitioners'
-      });
-
-      // New association for entity types
-      Spell.belongsToMany(models.EntityType, {
-        through: 'SpellEntities',
-        as: 'targetEntities'
-      });
-    }
-  }
-  
-  Spell.init({
+module.exports = (sequelize) => {
+  const Spell = sequelize.define('Spell', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: {
+          msg: "Spell name cannot be empty"
+        },
+        len: {
+          args: [6, 30], // Example: name must be between 3 and 255 characters
+          msg: "Spell name must be between 6 and 30 characters"
+        }
+      }
     },
-    // New field for spell description
     description: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true,
+      validate: {
+        notEmpty: {
+          msg: "Description cannot be empty" // if you decide to make description not null in the future
+        }
+      }
     },
-    spellCategoryId: {
+    sumId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'spell_categories',
-        key: 'id'
-      }
+        model: 'Sums',
+        key: 'id',
+      },
+      onDelete: 'CASCADE', // Add onDelete behavior
+      onUpdate: 'CASCADE', // Add onUpdate behavior
     },
-    requiredSum: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    difficultyLevel: {
+    categoryId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1
-    },
-    experienceGranted: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 10
+      references: {
+        model: 'SpellCategories',
+        key: 'id',
+      },
+      onDelete: 'CASCADE', // Add onDelete behavior
+      onUpdate: 'CASCADE', // Consider if you need onUpdate here
     }
-  }, {
-    sequelize,
-    modelName: 'Spell',
-    tableName: 'spells'
+  },
+  {
+    timestamps: true,
   });
+
+  Spell.associate = (models) => {
+    Spell.belongsTo(models.Sum, { foreignKey: 'sumId', as: 'sum' });
+    Spell.belongsTo(models.SpellCategory, { foreignKey: 'categoryId', as: 'category' });
+  };
+
   return Spell;
 };
