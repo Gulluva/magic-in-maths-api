@@ -1,7 +1,8 @@
 //  models/user.js
+'use strict';
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../config/config');
 const bcrypt = require('bcrypt');
 
 const User = sequelize.define('User', {
@@ -16,27 +17,19 @@ const User = sequelize.define('User', {
         unique: true,
         validate: {
             notEmpty: true,
-            len: [3, 50], // Example: Enforce username length between 3 and 50 characters
-            is: /^[a-zA-Z0-9_]+$/i, // Example: Allow only alphanumeric characters and underscores
+            len: [3, 50],
+            is: /^[a-zA-Z0-9_]+$/i,
         },
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: true, // Allow null for NPCs (they won't have passwords)
+        allowNull: true,
         validate: {
             len: [8, 255],
-            // You could add a validation function to check for password complexity, e.g.:
-            // isComplexEnough(value) {
-            //   if (!/[a-z]/.test(value)) {
-            //     throw new Error('Password must contain at least one lowercase letter');
-            //   }
-            //   // Add more complexity checks as needed (uppercase, numbers, symbols)
-            // }
         },
         set(value) {
-            // Hash the password before storing it (only if it's not null)
             if (value) {
-                const salt = bcrypt.genSaltSync(10); // You can adjust the salt rounds
+                const salt = bcrypt.genSaltSync(10);
                 const hashedPassword = bcrypt.hashSync(value, salt);
                 this.setDataValue('password', hashedPassword);
             }
@@ -44,39 +37,35 @@ const User = sequelize.define('User', {
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: true, // Make email optional (consider making it required for players later)
+        allowNull: true,
         unique: true,
         validate: {
             isEmail: true,
         },
     },
-
     type: {
-        type: DataTypes.ENUM('player', 'npc'), // Differentiates between players and NPCs
+        type: DataTypes.ENUM('player', 'npc'),
         allowNull: false,
         defaultValue: 'player',
     },
     npcType: {
-        type: DataTypes.ENUM('mentor', 'practice', 'quest', 'enemy'), // Types of NPCs
-        allowNull: true, // Only applicable to NPCs
+        type: DataTypes.ENUM('mentor', 'practice', 'quest', 'enemy'),
+        allowNull: true,
     },
     currentStage: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1,
         validate: {
-            min: 1
+            min: 0
         }
     },
     role: {
-        type: DataTypes.ENUM('user', 'admin'), // Possible roles for players (e.g., regular user, administrator)
+        type: DataTypes.ENUM('user', 'admin'),
         allowNull: false,
         defaultValue: 'user',
     },
 }, {
-    // Other model options go here
-    // For example, if you don't want Sequelize to automatically add createdAt and updatedAt timestamps:
-    // timestamps: false,
     hooks: {
         beforeCreate: async (user) => {
             if (user.password) {
@@ -92,5 +81,10 @@ const User = sequelize.define('User', {
         },
     },
 });
+
+// Define relationships:
+User.associate = (models) => {
+    User.hasMany(models.UserProficiency, { foreignKey: 'userId' });
+};
 
 module.exports = User;

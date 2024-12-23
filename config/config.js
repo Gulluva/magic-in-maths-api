@@ -1,6 +1,6 @@
 // config/config.js
 require('dotenv').config();  // This allows us to use environment variables
-
+ 
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,

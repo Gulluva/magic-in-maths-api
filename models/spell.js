@@ -1,65 +1,82 @@
 //  models/spell.js
 const { DataTypes } = require('sequelize');
+const sequelize = require('../config/config');
+const SpellCategory = require('./spellCategory');
+const Sphere = require('./sphere'); // Import the Sphere model
 
-module.exports = (sequelize) => {
-  const Spell = sequelize.define('Spell', {
+const Spell = sequelize.define('Spell', {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        notEmpty: {
-          msg: "Spell name cannot be empty"
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+        validate: {
+            notEmpty: true,
+            len: [3, 50], // Example: Enforce name length between 3 and 50 characters
         },
-        len: {
-          args: [6, 30], // Example: name must be between 3 and 255 characters
-          msg: "Spell name must be between 6 and 30 characters"
-        }
-      }
     },
     description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-      validate: {
-        notEmpty: {
-          msg: "Description cannot be empty" // if you decide to make description not null in the future
-        }
-      }
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
-    sumId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Sums',
-        key: 'id',
-      },
-      onDelete: 'CASCADE', // Add onDelete behavior
-      onUpdate: 'CASCADE', // Add onUpdate behavior
+    spellCategoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: SpellCategory,
+            key: 'id',
+        },
     },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'SpellCategories',
-        key: 'id',
-      },
-      onDelete: 'CASCADE', // Add onDelete behavior
-      onUpdate: 'CASCADE', // Consider if you need onUpdate here
-    }
-  },
-  {
+    successExperience: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 10, // Example default value
+        validate: {
+            min: 0,
+        },
+    },
+    failureExperience: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 5, // Example default value
+        validate: {
+            min: 0,
+        },
+    },
+    formula: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    difficulty: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    minLevel: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
+    },
+    sphereId: { // Use sphereId instead of sumId
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Sphere,
+            key: 'id',
+        },
+    },
+}, {
     timestamps: true,
-  });
+});
 
-  Spell.associate = (models) => {
-    Spell.belongsTo(models.Sum, { foreignKey: 'sumId', as: 'sum' });
-    Spell.belongsTo(models.SpellCategory, { foreignKey: 'categoryId', as: 'category' });
-  };
-
-  return Spell;
+// Define relationships:
+Spell.associate = (models) => {
+    Spell.belongsTo(models.SpellCategory, { foreignKey: 'spellCategoryId' });
+    Spell.belongsTo(models.Sphere, { foreignKey: 'sphereId' });
 };
+
+module.exports = Spell;
