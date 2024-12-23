@@ -1,6 +1,6 @@
 // models/__tests__/Sphere.test.js
 
-const { Sphere, sequelize } = require('..'); // Adjust path to your models
+const { Sphere, sequelize } = require('../../models'); // Adjust path to your models
 
 describe('Sphere Model', () => {
     beforeAll(async () => {
