@@ -2,10 +2,10 @@
 'use strict';
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
+const Sequelize = require('../config/config');
 const bcrypt = require('bcrypt');
-
-const User = sequelize.define('User', {
+console.log('Sequelize instance:', Sequelize);
+const User = Sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

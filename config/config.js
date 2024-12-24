@@ -1,6 +1,8 @@
 // config/config.js
+const { Sequelize } = require('sequelize');
 require('dotenv').config();  // This allows us to use environment variables
  
+console.log('Sequelize instance:', Sequelize);
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,
@@ -41,3 +43,5 @@ module.exports = {
     }
   }
 };
+
+module.exports = Sequelize;

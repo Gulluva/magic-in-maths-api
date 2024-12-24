@@ -1,11 +1,11 @@
 // models/__tests__/Sphere.test.js
 
-const { Sphere, sequelize } = require('../../models'); // Adjust path to your models
+const { Sphere, Sequelize } = require('../../models'); // Adjust path to your models
 
 describe('Sphere Model', () => {
     beforeAll(async () => {
         // Connect to the test database
-        await sequelize.sync({ force: true }); // Use force: true to drop and recreate tables before all tests
+        await Sequelize.sync({ force: true }); // Use force: true to drop and recreate tables before all tests
     });
 
     beforeEach(async () => {
@@ -15,7 +15,7 @@ describe('Sphere Model', () => {
 
     afterAll(async () => {
         // Close the database connection after all tests
-        await sequelize.close();
+        await Sequelize.close();
     });
 
     it('should create a white sphere with default value 1', async () => {

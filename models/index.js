@@ -6,7 +6,10 @@ const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const db = {};
 
-const sequelize = require(__dirname + '/../config/config');
+const Sequelize = require(__dirname + '/../config/config');
+console.log('Sequelize instance:', Sequelize);
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
 fs.readdirSync(__dirname)
     .filter(file => {
@@ -27,8 +30,5 @@ Object.keys(db).forEach(modelName => {
         db[modelName].associate(db);
     }
 });
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 module.exports = db;

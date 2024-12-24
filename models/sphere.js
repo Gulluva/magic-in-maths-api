@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
+const Sequelize = require('../config/config');
+
+console.log('Sequelize instance:', Sequelize);
 
 const primeColors = {
     2: 'red',
