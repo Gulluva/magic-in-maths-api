@@ -1,13 +1,13 @@
 // models/userProficiency.js
 'use strict';
 const { DataTypes } = require('sequelize');
-const Sequelize = require('../config/config');
+const { sequelize } = require('../models');
 const User = require('./user');
 const SpellCategory = require('./spellCategory');
 
-console.log('Sequelize instance:', Sequelize);
 
-const UserProficiency = Sequelize.define('UserProficiency', {
+
+const UserProficiency = sequelize.define('UserProficiency', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

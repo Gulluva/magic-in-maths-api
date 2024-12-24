@@ -1,7 +1,7 @@
 // models/spellCategory.js
 'use strict';
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
+const { sequelize } = require('../models');
 const Spell = require('./spell'); // Assuming you have a Spell model
 const UserProficiency = require('./userProficiency');
 

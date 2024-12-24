@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const Sequelize = require('../config/config');
+const { sequelize } = require('../models');
 
 console.log('Sequelize instance:', Sequelize);
 
