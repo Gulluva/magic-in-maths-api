@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
-console.log('Sequelize instance:', Sequelize);
+console.log('Sequelize instance:', sequelize);
 
 const primeColors = {
     2: 'red',

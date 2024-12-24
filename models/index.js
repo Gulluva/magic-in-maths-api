@@ -1,3 +1,4 @@
+// models/index.js
 'use strict';
 
 const fs = require('fs');
@@ -5,16 +6,17 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config')[env]; // Import configuration for the environment
+const config = require(path.join(__dirname, '..', 'config', 'config.js'))[env]; // Import configuration for the environment
 const db = {};
 
+console.log({config});
+
 // Create a Sequelize instance based on the current environment's configuration
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+
+  const sequelize = new Sequelize(config);
+
+console.log({sequelize});
+
 
 // Read all model files and initialize them with the sequelize instance
 fs.readdirSync(__dirname)

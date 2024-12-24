@@ -1,5 +1,5 @@
 // config/config.js
-const { Sequelize } = require('sequelize');
+// const { Sequelize } = require('sequelize');
 require('dotenv').config(); // This allows us to use environment variables
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
-    logging: console.log, // Set to false to disable SQL query logging
+    logging: false, // Set to false to disable SQL query logging
   },
   test: {
     // Test environment configuration
@@ -20,7 +20,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
-    logging: console.log, // Set to false to disable SQL query logging
+    logging: false, // Set to false to disable SQL query logging
   },
   production: {
     // Production environment configuration
@@ -32,6 +32,6 @@ module.exports = {
         rejectUnauthorized: false // Required for some hosting providers
       }
     },
-    logging: console.log, // Set to false to disable SQL query logging
+    logging: false, // Set to false to disable SQL query logging
   }
 };

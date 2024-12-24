@@ -4,7 +4,7 @@ const { sequelize } = require('../models');
 const SpellCategory = require('./spellCategory');
 const Sphere = require('./sphere'); // Import the Sphere model
 
-const Spell = Sequelize.define('Spell', {
+const Spell = sequelize.define('Spell', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
