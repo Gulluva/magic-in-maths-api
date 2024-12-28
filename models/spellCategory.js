@@ -1,10 +1,7 @@
 // models/spellCategory.js
 'use strict';
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../models');
-const Spell = require('./spell'); // Assuming you have a Spell model
-const UserProficiency = require('./userProficiency');
 
+module.exports = (sequelize, DataTypes) => {
 const SpellCategory = sequelize.define('SpellCategory', {
     id: {
         type: DataTypes.INTEGER,
@@ -29,11 +26,12 @@ const SpellCategory = sequelize.define('SpellCategory', {
     },
 });
 
-// Define relationships:
-SpellCategory.hasMany(Spell, { foreignKey: 'spellCategoryId' });
-Spell.belongsTo(SpellCategory, { foreignKey: 'spellCategoryId' });
+ // Define associations in the associate method
+ SpellCategory.associate = (models) => {
+    SpellCategory.hasMany(models.Spell, { foreignKey: 'spellCategoryId' });
+    SpellCategory.hasMany(models.UserProficiency, { foreignKey: 'spellCategoryId' });
+};
 
-SpellCategory.hasMany(UserProficiency, { foreignKey: 'spellCategoryId' });
-UserProficiency.belongsTo(SpellCategory, { foreignKey: 'spellCategoryId' });
+return SpellCategory;
 
-module.exports = SpellCategory;
+};

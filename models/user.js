@@ -1,12 +1,10 @@
 //  models/user.js
 'use strict';
 
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../models');
+
 const bcrypt = require('bcrypt');
 
-console.log({sequelize});
-
+module.exports = (sequelize, DataTypes) => {
 const User = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
@@ -85,8 +83,10 @@ const User = sequelize.define('User', {
 });
 
 // Define relationships:
-User.associate = (models) => {
-    User.hasMany(models.UserProficiency, { foreignKey: 'userId' });
-};
 
-module.exports = User;
+  User.associate = (models) => {
+      User.hasMany(models.UserProficiency, { foreignKey: 'userId' });
+  };
+
+return User;
+};

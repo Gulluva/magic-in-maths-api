@@ -1,4 +1,6 @@
 // models/entityType.js
+'use strict';
+
 module.exports = (sequelize, DataTypes) => {
     const EntityType = sequelize.define('EntityType', {
       id: {
@@ -11,12 +13,20 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       category: {
-        type: DataTypes.ENUM('LIVING', 'MATTER', 'ENVIRONMENTAL', 'CONSTRUCTED', 'MENTAL'),
+        type: DataTypes.ENUM('LIVING', 'MATTER', 'ENVIRONMENTAL', 'CONSTRUCTED', 'MENTAL', 'SOCIAL'),
         allowNull: false
       },
       description: {
         type: DataTypes.TEXT
       }
     });
+
+//  Define relationships
+    EntityType.associate = (models) => {
+      EntityType.hasMany(models.SpellEntity, {
+          foreignKey: 'entityTypeId'
+      });
+  };
+
     return EntityType;
   };

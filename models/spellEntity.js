@@ -1,4 +1,6 @@
 // models/spellEntity.js
+'use strict';
+
 module.exports = (sequelize, DataTypes) => {
     const SpellEntity = sequelize.define('SpellEntity', {
       spellId: {
@@ -18,5 +20,16 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     });
+
+//  Define relationships
+SpellEntity.associate = (models) => {
+        SpellEntity.belongsTo(models.Spell, {
+            foreignKey: 'spellId'
+        });
+        SpellEntity.belongsTo(models.EntityType, {
+            foreignKey: 'entityTypeId'
+        });
+    };
+
     return SpellEntity;
   };

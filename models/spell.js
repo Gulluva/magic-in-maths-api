@@ -1,9 +1,7 @@
 //  models/spell.js
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../models');
-const SpellCategory = require('./spellCategory');
-const Sphere = require('./sphere'); // Import the Sphere model
+'use strict';
 
+module.exports = (sequelize, DataTypes) => {
 const Spell = sequelize.define('Spell', {
     id: {
         type: DataTypes.INTEGER,
@@ -26,10 +24,6 @@ const Spell = sequelize.define('Spell', {
     spellCategoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: SpellCategory,
-            key: 'id',
-        },
     },
     successExperience: {
         type: DataTypes.INTEGER,
@@ -64,10 +58,6 @@ const Spell = sequelize.define('Spell', {
     sphereId: { // Use sphereId instead of sumId
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: Sphere,
-            key: 'id',
-        },
     },
 }, {
     timestamps: true,
@@ -77,6 +67,9 @@ const Spell = sequelize.define('Spell', {
 Spell.associate = (models) => {
     Spell.belongsTo(models.SpellCategory, { foreignKey: 'spellCategoryId' });
     Spell.belongsTo(models.Sphere, { foreignKey: 'sphereId' });
+    Spell.hasMany(models.SpellEntity, { foreignKey: 'spellId' });
 };
 
-module.exports = Spell;
+return Spell;
+
+};

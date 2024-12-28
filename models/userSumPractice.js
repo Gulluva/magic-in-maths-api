@@ -1,20 +1,10 @@
 // models/userSumPractice.js
 'use strict';
-const { Model } = require('sequelize');
+
 
 module.exports = (sequelize, DataTypes) => {
-  class UserSumPractice extends Model {
-    static associate(models) {
-      UserSumPractice.belongsTo(models.User, {
-        foreignKey: 'UserId',  // Match the capitalization Sequelize is expecting
-      });
-      UserSumPractice.belongsTo(models.Sum, {
-        foreignKey: 'SumId',   // Match the capitalization Sequelize is expecting
-      });
-    }
-  }
   
-  UserSumPractice.init({
+const UserSumPractice = sequelize.define('UserSumPractice', {
     UserId: {  // Match the capitalization Sequelize is using
       type: DataTypes.INTEGER,
       allowNull: false
@@ -38,11 +28,18 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0
     }
   }, {
-    sequelize,
-    modelName: 'UserSumPractice',
     tableName: 'user_sum_practices',
     timestamps: true
   });
+
+  UserSumPractice.associate = (models) => {
+    UserSumPractice.belongsTo(models.User, {
+        foreignKey: 'UserId'
+    });
+    UserSumPractice.belongsTo(models.Sum, {
+        foreignKey: 'SumId'
+    });
+};
   
   return UserSumPractice;
 };
